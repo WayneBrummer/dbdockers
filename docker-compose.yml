@@ -1,0 +1,45 @@
+version: '3.7'
+services:
+
+# MySQL Master
+  mysql-master:
+    image: 'bitnami/mysql:latest'
+    build:
+      args:
+        - TZ=Africa/Johannesburg
+      context: ./mysql/base
+    container_name: mysql
+    restart: on-failure
+    environment:
+      - MYSQL_ROOT_PASSWORD=qwe123
+    ports:
+      - 3306:3306/tcp
+    volumes:
+      - db-data:/mysql/data
+
+  # PostGres Master
+  postgres-master:
+    image: 'bitnami/postgresql:latest'
+    container_name: postgresql
+    restart: always
+    environment:
+      - POSTGRESQL_PASSWORD=qwe123
+    ports:
+      - '5432:5432'
+    volumes:
+      - db-data:/postgres/data
+
+  # Redis
+  redis-master:
+    image: 'bitnami/redis:latest'
+    container_name: redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - '6379:6379'
+    volumes:
+      - db-data:/redis/data
+
+# VOLUMES
+volumes:
+  db-data:
